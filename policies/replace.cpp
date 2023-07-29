@@ -141,13 +141,16 @@ ll REPLACE::getBlockToReplace(ll address, int GT){
     // }
     
     for(auto it : cold){
-        int pre = GT - timemp[Cache::AddressInBlocks[it.first]];  // it.first: victim block's index, AddressInBlocks[]: block index에 해당하는 address
-        //printf("pre: %d GT: %d   %d-----------------\n", pre, GT, timemp[Cache::AddressInBlocks[it.first]]);
-        vv.push_back({lastUsed[it.first],Cache::AddressInBlocks[it.first], pre});  // frequency, address, pre_reusedistance
+        if(cold.size() == 1) return cold[0].first;
+        else{
+            int pre = GT - timemp[Cache::AddressInBlocks[it.first]];  // it.first: victim block's index, AddressInBlocks[]: block index에 해당하는 address
+            //printf("pre: %d GT: %d   %d-----------------\n", pre, GT, timemp[Cache::AddressInBlocks[it.first]]);
+            vv.push_back({lastUsed[it.first],Cache::AddressInBlocks[it.first], pre});  // frequency, address, pre_reusedistance
+        }
     }
 
 
-    if(cold.size() == 1) return cold[0].first;
+    
 //////////////////////////이 부분에 cold에 들어있는 거 학습 들어가는 거 구현되야함 //////////////////////////// 
 
     timemp[address] = -1;  // 새로 들어온 주소의 시간 초기화
