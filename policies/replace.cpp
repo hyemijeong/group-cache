@@ -93,46 +93,46 @@ vector<pair<int,int>> runKmeans(vector<tuple<int,int,int,int>> v, int way) //ind
 
 ll REPLACE::getBlockToReplace(ll address, int GT){
     long long victim_block = 0;
-    // int index = getIndex(address);
-    // for(int block = 0; block < cacheSize/blockSize; block++){
-    //     if(timesUsed[block] == 0 || lastUsed[block] == 0)  // an empty slot
-    //             if(block >= index*setAssociativity && block < (index+1)*setAssociativity)
-    //                 return block;
-    //      return block;
-    //      v.push_back({block, lastUsed[block],timesUsed[block], address});
-    // }
-    v.push_back({1,5,4,5});
-    v.push_back({4,5,4,8});
-    v.push_back({1,7,2,6});
-    v.push_back({6,5,2,8});
-    v.push_back({8,0,3,2});
-    v.push_back({3,9,7,2});
-    v.push_back({4,5,6,0});
-	v.push_back({4,45,4,16});
-    v.push_back({3,7,78,6});
-    v.push_back({6,5,5,8});
-    v.push_back({8,2,3,3});
-    v.push_back({3,9,7,79});
-    v.push_back({4,20,6,34});
-	v.push_back({8,20,3,3});
-    v.push_back({3,14,7,79});
-    v.push_back({12,70,6,34});
-    v.push_back({1,5,4,5});
-    v.push_back({4,5,4,8});
-    v.push_back({1,7,2,6});
-    v.push_back({6,5,2,8});
-    v.push_back({8,0,3,2});
-    v.push_back({3,9,7,2});
-    v.push_back({4,5,6,0});
-	v.push_back({4,45,4,16});
-    v.push_back({3,7,78,6});
-    v.push_back({6,5,5,8});
-    v.push_back({8,2,3,3});
-    v.push_back({3,9,7,79});
-    v.push_back({4,20,6,34});
-	v.push_back({8,20,3,3});
-    v.push_back({3,14,7,79});
-    v.push_back({12,70,6,34});
+    int index = getIndex(address);
+    for(int block = 0; block < cacheSize/blockSize; block++){
+        if(timesUsed[block] == 0 || lastUsed[block] == 0){  // an empty slot
+                if(block >= index*setAssociativity && block < (index+1)*setAssociativity)
+                    return block;
+        }
+         v.push_back({block, lastUsed[block],timesUsed[block], address});
+    }
+    // v.push_back({1,5,4,5});
+    // v.push_back({4,5,4,8});
+    // v.push_back({1,7,2,6});
+    // v.push_back({6,5,2,8});
+    // v.push_back({8,0,3,2});
+    // v.push_back({3,9,7,2});
+    // v.push_back({4,5,6,0});
+	// v.push_back({4,45,4,16});
+    // v.push_back({3,7,78,6});
+    // v.push_back({6,5,5,8});
+    // v.push_back({8,2,3,3});
+    // v.push_back({3,9,7,79});
+    // v.push_back({4,20,6,34});
+	// v.push_back({8,20,3,3});
+    // v.push_back({3,14,7,79});
+    // v.push_back({12,70,6,34});
+    // v.push_back({1,5,4,5});
+    // v.push_back({4,5,4,8});
+    // v.push_back({1,7,2,6});
+    // v.push_back({6,5,2,8});
+    // v.push_back({8,0,3,2});
+    // v.push_back({3,9,7,2});
+    // v.push_back({4,5,6,0});
+	// v.push_back({4,45,4,16});
+    // v.push_back({3,7,78,6});
+    // v.push_back({6,5,5,8});
+    // v.push_back({8,2,3,3});
+    // v.push_back({3,9,7,79});
+    // v.push_back({4,20,6,34});
+	// v.push_back({8,20,3,3});
+    // v.push_back({3,14,7,79});
+    // v.push_back({12,70,6,34});
 
 
     vector<pair<int, int>> cold = runKmeans(v, getIndex(address));  // index, coldwarmhot group
@@ -155,7 +155,6 @@ ll REPLACE::getBlockToReplace(ll address, int GT){
     v.clear();
     return victim_block;
  }
-
 
 void REPLACE::update(ll block, int status, int GT, int address){
     if(status ==1){  // hit
