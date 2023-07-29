@@ -10,7 +10,8 @@ class REPLACE : public Cache{  // REPLACE class가 Cache class의 기능을 상�
     private : // 멤버 변수
         vector<tuple<int, int, int, int>> v;
         vector<tuple<int,int,int>> vv; // frequency, address, pre
-        map<int,int> timemp;
+        map<int, int> timemp;
+        map<int, int> premp;
         long long time;
         long long *lastUsed;
         long long *timesUsed;
