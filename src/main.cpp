@@ -6,13 +6,10 @@
 #include <unistd.h>
 #include "ioUtils.hpp" //contains I/O functions
 #include "cache.h" //contains all auxillary functions
-#include "../policies/plru.h"
 #include "../policies/lru.h"
-#include "../policies/srrip.h"
-#include "../policies/nru.h"
 #include "../policies/lfu.h"
-#include "../policies/fifo.h"
-#include "../policies/replace.h"
+#include "../policies/Timerlfu.h"
+
 
 using namespace std;
 using namespace std::chrono;
@@ -23,41 +20,22 @@ int GT;
 
 
 Cache* createCacheInstance(string& policy, ll cs, ll bs, ll sa, int level){
-    
-    // check validity here and exit if invalid
-    if(policy == "plru"){
-        Cache* cache = new PLRU(cs, bs, sa, level);
-        return cache;
-    }
-    else if(policy == "lru"){
+    if(policy == "lru"){
         Cache* cache = new LRU(cs, bs, sa, level);
-        return cache;
-    }
-    else if(policy == "srrip"){
-        Cache* cache = new SRRIP(cs, bs, sa, level);
-        return cache;
-    }
-    else if(policy == "nru"){
-        Cache* cache = new NRU(cs, bs, sa, level);
         return cache;
     }
     else if(policy == "lfu"){
         Cache* cache = new LFU(cs, bs, sa, level);
         return cache;
     }
-    else if(policy == "fifo"){
-        Cache* cache = new FIFO(cs, bs, sa, level);
-        return cache;
-    }
-    else if(policy == "replace"){
-        Cache* cache = new REPLACE(cs, bs, sa, level);
+    else if(policy == "timerlfu"){
+        Cache* cache = new TIMERLFU(cs, bs, sa, level);
         return cache;
     }
 }
 
 int main(int argc, char *argv[]){
-    GT =0;
-    printf("%d\n", GT);    
+    GT =0;   
     ifstream params;
     params.open(argv[1]);
     string word;
@@ -90,12 +68,28 @@ int main(int argc, char *argv[]){
     auto start = high_resolution_clock::now();
 
     while(true){
+        string p;
+        params >> p;
         GT=GT+1;
+        
         //printf("%d\n", GT);
         ll address = getNextAddress();
         if(address == 0) break; //reached eof
 
         for(int levelItr=0; levelItr<levels; levelItr++){
+            
+            if(p == "timerlfu"){
+                if(GT%1000 == 0){ // Time GC
+                    std::vector<int> vec = cache[levelItr]->GC(GT);
+                    //printf("%d\n",vec.size());
+                    for(int block : vec){
+                        cache[levelItr]->TimeErase(block);
+                    }
+                    vec.clear();
+                }
+            }
+           
+
             ll block = cache[levelItr]->getBlockPosition(address);
             // getBlockPosition will be implemented in cache.cpp
             if(block == -1){ //cache miss
@@ -129,7 +123,8 @@ int main(int argc, char *argv[]){
     }
 
     auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<seconds>(stop-start);
+    auto duration = duration_cast<milliseconds>(stop-start);
+    printf("Duration: %.3f seconds\n",duration.count() / 1000.0);
 
     #if INTERACTIVE
     usleep(2000000);  

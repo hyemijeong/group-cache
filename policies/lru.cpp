@@ -1,5 +1,5 @@
 #include "lru.h"
-
+#include <vector>
 #define ll long long
 
 LRU::LRU(ll cacheSize, ll blockSize, ll setAssociativity, int level) : 
@@ -27,6 +27,9 @@ ll LRU::getBlockToReplace(ll address, int GT){
 void LRU::update(ll block, int status, int time, int address){
     lastUsed[block] = time;
     time++;
+}
+
+std::vector<int> LRU::GC(int GT){
 }
 
 LRU::~LRU(){

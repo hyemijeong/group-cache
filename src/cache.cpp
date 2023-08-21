@@ -138,6 +138,11 @@ void Cache::insert(ll address, ll blockToReplace){
     AddressInBlocks[blockToReplace] = address;
 }
 
+void Cache::TimeErase(int block){
+    cacheBlocks[block] = -1;
+    AddressInBlocks[block] = -1;
+}
+
 ll Cache::getHits(){
     return hits;
 }

@@ -5,6 +5,7 @@
 #include <string>
 #include <string.h>
 #include <map>
+#include <vector>
 
 // classes defined
 class Cache;
@@ -40,6 +41,7 @@ class Cache{
         long long getIndex(long long address);
         long long getBlockPosition(long long address);
         void insert(long long address, long long blockToReplace);
+        void TimeErase(int block);
 
         long long getHits();
         long long getMisses();
@@ -47,6 +49,7 @@ class Cache{
 
         virtual long long getBlockToReplace(long long address, int GT) = 0;
         virtual void update(long long blockToReplace, int status, int time, int address) = 0;
+        virtual std::vector<int> GC(int GT) = 0;
 
         virtual ~Cache();
 

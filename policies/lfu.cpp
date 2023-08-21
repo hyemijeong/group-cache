@@ -1,5 +1,5 @@
 #include "lfu.h"
-
+#include <vector>
 #define ll long long
 
 LFU::LFU(ll cacheSize, ll blockSize, ll setAssociativity, int level) :
@@ -7,6 +7,11 @@ LFU::LFU(ll cacheSize, ll blockSize, ll setAssociativity, int level) :
         timesUsed = (ll *)calloc(numberOfSets * (setAssociativity), sizeof(ll));
         if(timesUsed == NULL){
             printf("Failed to allocate memory for data members of LFU (L%d) cache\n", level);
+            exit(0);
+        }
+        lastUsed = (ll *)calloc(numberOfSets * (setAssociativity), sizeof(ll));
+        if(lastUsed == NULL){
+            printf("Failed to allocate memory for data members of LRU (L%d) cache\n", level);
             exit(0);
         }
     }
@@ -24,13 +29,18 @@ ll LFU::getBlockToReplace(ll address, int GT){
     return min_block;
 }
 
-void LFU::update(ll block, int status, int time, int address){
-    if(status == 1){
+void LFU::update(ll block, int status, int GT, int address){
+    if(status == 1){ // hit
         timesUsed[block]++;
+        lastUsed[block] = GT;
     }
-    else{
+    else{  // miss
         timesUsed[block] = 0;
+        lastUsed[block] = GT;
     }
+}
+
+std::vector<int> LFU::GC(int GT){
 }
 
 LFU::~LFU(){
