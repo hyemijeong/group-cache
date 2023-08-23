@@ -14,6 +14,11 @@ LFU::LFU(ll cacheSize, ll blockSize, ll setAssociativity, int level) :
             printf("Failed to allocate memory for data members of LRU (L%d) cache\n", level);
             exit(0);
         }
+        lastReuse = (ll *)calloc(numberOfSets * (setAssociativity), sizeof(ll));
+        if(lastReuse == NULL){
+            printf("Failed to allocate memory for data members of LRU (L%d) cache\n", level);
+            exit(0);
+        }
     }
 
 ll LFU::getBlockToReplace(ll address, int GT){
@@ -30,17 +35,28 @@ ll LFU::getBlockToReplace(ll address, int GT){
 }
 
 void LFU::update(ll block, int status, int GT, int address){
-    if(status == 1){ // hit
+    if(status == 1){ // hit(이미 있던 page)
+        lastReuse[block]= GT - lastUsed[block];
         timesUsed[block]++;
         lastUsed[block] = GT;
     }
-    else{  // miss
-        timesUsed[block] = 0;
+    else{  // miss(새로 들어온 page)
+        timesUsed[block] = 1;
         lastUsed[block] = GT;
+        lastReuse[block] = 0;
     }
 }
 
 std::vector<int> LFU::GC(int GT){
+    vec.clear();
+    for(int i=0;i<cacheSize/blockSize;i++){
+        int a = (GT-lastUsed[i]) - lastReuse[i];  
+        if(a > 1.5*lastReuse[i]){
+            timesUsed[i]=0;
+            vec.push_back(i);            
+        }
+    }
+    return vec;
 }
 
 LFU::~LFU(){

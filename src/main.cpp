@@ -4,11 +4,12 @@
 #include <vector>
 #include <map>
 #include <unistd.h>
+#include <iostream>
 #include "ioUtils.hpp" //contains I/O functions
 #include "cache.h" //contains all auxillary functions
 #include "../policies/lru.h"
 #include "../policies/lfu.h"
-#include "../policies/Timerlfu.h"
+
 
 
 using namespace std;
@@ -26,10 +27,6 @@ Cache* createCacheInstance(string& policy, ll cs, ll bs, ll sa, int level){
     }
     else if(policy == "lfu"){
         Cache* cache = new LFU(cs, bs, sa, level);
-        return cache;
-    }
-    else if(policy == "timerlfu"){
-        Cache* cache = new TIMERLFU(cs, bs, sa, level);
         return cache;
     }
 }
@@ -72,23 +69,20 @@ int main(int argc, char *argv[]){
         params >> p;
         GT=GT+1;
         
-        //printf("%d\n", GT);
         ll address = getNextAddress();
         if(address == 0) break; //reached eof
-
         for(int levelItr=0; levelItr<levels; levelItr++){
-            
-            if(p == "timerlfu"){
-                if(GT%1000 == 0){ // Time GC
-                    std::vector<int> vec = cache[levelItr]->GC(GT);
-                    //printf("%d\n",vec.size());
-                    for(int block : vec){
-                        cache[levelItr]->TimeErase(block);
-                    }
-                    vec.clear();
+/////////////////////////////////끄면 lfu//////////////////////////////////////
+            if(GT%50 == 0){ // Time GC
+               //printf("hihi\n");
+                std::vector<int> vec = cache[levelItr]->GC(GT);
+                printf("%d\n",vec.size());
+                for(int block : vec){
+                    cache[levelItr]->TimeErase(block);
                 }
+                vec.clear();
             }
-           
+/////////////////////////////////끄면 lfu//////////////////////////////////////
 
             ll block = cache[levelItr]->getBlockPosition(address);
             // getBlockPosition will be implemented in cache.cpp

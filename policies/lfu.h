@@ -6,6 +6,7 @@ class LFU : public Cache{
     private:
         long long *timesUsed;
         long long *lastUsed;
+        long long *lastReuse;
         // int total_count=0;
         // int count=0;
         std::vector<int> vec;
