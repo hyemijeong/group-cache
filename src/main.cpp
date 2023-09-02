@@ -76,7 +76,7 @@ int main(int argc, char *argv[]){
             if(GT%50 == 0){ // Time GC
                //printf("hihi\n");
                 std::vector<int> vec = cache[levelItr]->GC(GT);
-                printf("%d\n",vec.size());
+                // printf("%d\n",vec.size());
                 for(int block : vec){
                     cache[levelItr]->TimeErase(block);
                 }

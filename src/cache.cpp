@@ -109,7 +109,10 @@ int Cache::getLevel(){
 }
 
 ll Cache::getTag(ll address){
+    /* set associate 인 경우
     return address>>(indexSize + offsetSize);
+    */
+    return address>>offsetSize;
 }
 
 ll Cache::getIndex(ll address){
