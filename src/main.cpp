@@ -73,15 +73,15 @@ int main(int argc, char *argv[]){
         if(address == 0) break; //reached eof
         for(int levelItr=0; levelItr<levels; levelItr++){
 /////////////////////////////////끄면 lfu//////////////////////////////////////
-            if(GT%50 == 0){ // Time GC
-               //printf("hihi\n");
-                std::vector<int> vec = cache[levelItr]->GC(GT);
-                // printf("%d\n",vec.size());
-                for(int block : vec){
-                    cache[levelItr]->TimeErase(block);
-                }
-                vec.clear();
-            }
+            // if(GT%50 == 0){ // Time GC
+            //    //printf("hihi\n");
+            //     std::vector<int> vec = cache[levelItr]->GC(GT);
+            //     // printf("%d\n",vec.size());
+            //     for(int block : vec){
+            //         cache[levelItr]->TimeErase(block);
+            //     }
+            //     vec.clear();
+            // }
 /////////////////////////////////끄면 lfu//////////////////////////////////////
 
             ll block = cache[levelItr]->getBlockPosition(address);
