@@ -50,7 +50,8 @@ void LFU::update(ll block, int status, int GT, int address){
 std::vector<int> LFU::GC(int GT){
     vec.clear();
     for(int i=0;i<cacheSize/blockSize;i++){
-        int a = (GT-lastUsed[i]) - lastReuse[i];  
+        int a = (GT-lastUsed[i]) - lastReuse[i]; 
+
         // printf("%d, %d\n",GT,a/lastReuse[i]);
         if(a > 1.5*lastReuse[i]){
             
