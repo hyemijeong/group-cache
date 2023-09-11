@@ -73,7 +73,7 @@ int main(int argc, char *argv[]){
         if(address == 0) break; //reached eof
         for(int levelItr=0; levelItr<levels; levelItr++){
 /////////////////////////////////끄면 lfu//////////////////////////////////////
-            // if(GT%1024 == 0){ // Time GC
+            // if(GT%2048 == 0){ // Time GC
             //    //printf("hihi\n");
             //     std::vector<int> vec = cache[levelItr]->GC(GT);
             //     // printf("%d\n",vec.size());
