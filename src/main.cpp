@@ -94,6 +94,8 @@ int main(int argc, char *argv[]){
                 cache[levelItr]->insert(address, blockToReplace);
                 // insert will be implemented in cache.cpp
                 cache[levelItr]->update(blockToReplace, 0, GT, address);
+
+                //실시간 hit ratio 출력
                 printf("%f\n", cache[levelItr]->getHitRate());
                 // update will be implemented in policy.cpp; will include updating the tree as in plru or updating the count as in lfu; 0 denotes miss
                 #if INTERACTIVE
@@ -106,7 +108,10 @@ int main(int argc, char *argv[]){
                 // incHits will be implemented in cache.cpp
                 
                 cache[levelItr]->update(block, 1, GT, address);
+
+                //실시간 hit ratio 출력
                 printf("%f\n", cache[levelItr]->getHitRate());
+
                 //hit 되었을 때 업데이트 
                 // update will be implemented in policy.cpp; 1 denotes hit
                 #if INTERACTIVE
