@@ -23,10 +23,14 @@ ll getNextAddress(){
     scanf("%s %c %s", instruction, &accessType, address);
     if(strcpy(instruction, "#eof") == 0) //return address 0 if end of line
         return 0;
-    if(accessType == 'R')
+    if(accessType == 'R'){
         incReads();
-    else
+        printf("0,");
+    }
+    else{
         incWrites();
+        printf("1,");
+    }
     return atoll(address); //10진수 그대로 사용
 }
 

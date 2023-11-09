@@ -122,7 +122,6 @@ ll Cache::getIndex(ll address){
 ll Cache::getBlockPosition(ll address){
     ll index = getIndex(address);
     ll tag = getTag(address);
-    printf("%lld\n" , tag);
     ll iterator;
     for(iterator=index*setAssociativity; iterator<(index+1)*setAssociativity; iterator++){
         if(tag == cacheBlocks[iterator]){
