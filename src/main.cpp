@@ -40,20 +40,7 @@ int main(int argc, char *argv[]){
 
     vector<Cache*> cache(levels);
 
-    //머신러닝 파일 불러오기 
-    ifstream  ml_hitRatio("/home/hyemi/group-cache/src/msr_result.txt");
-    string line;
-    vector<string> ml_hitv; //머신러닝 예측 결과 벡터
-    while(true) {
-    	getline(ml_hitRatio, line);
-        if(ml_hitRatio.eof()) break;
-        ml_hitv.push_back(line);
-    }
-    ml_hitRatio.close();
 
-    // for(int i =0; i<ml_hitv.size(); i++){
-    //     cout << ml_hitv[i] << endl;
-    // }
 
     int iterator = 0;
     while(iterator < levels){
@@ -65,6 +52,34 @@ int main(int argc, char *argv[]){
         params >> word; sa = stoll(word.c_str());
         cache[iterator++] = createCacheInstance(policy, cs, bs, sa, iterator);
     }
+
+
+
+    //머신러닝 파일 불러오기 
+    ifstream  ml_hitRatio("/home/kkm/group-cache/src/msr_result.txt");
+    string line;
+    vector<string> ml_hitv; //머신러닝 예측 결과 벡터
+
+    if(!ml_hitRatio.is_open()){
+        cout << "파일을 열 수 없음" << endl;
+        return 1;
+    }
+    else{
+        cout << " 파일 열림~~~" << endl;
+    }
+
+    while(getline(ml_hitRatio, line)) {
+        ml_hitv.push_back(line);
+
+    }
+
+    ml_hitRatio.close();
+
+    // for(int i =0; i<ml_hitv.size(); i++){
+    //     cout << ml_hitv[i] << endl;
+    // }
+    // cout << ml_hitv.size() << endl;
+
 
     #if INTERACTIVE
     initscr();
@@ -83,33 +98,34 @@ int main(int argc, char *argv[]){
         GT=GT+1;
         
         ll address = getNextAddress();
-        int hit_sum;
+        int hit_sum =0;
         
         if(address == 0) break; //reached eof
         for(int levelItr=0; levelItr<levels; levelItr++){
 /////////////////////////////////끄면 lfu//////////////////////////////////////
-            // if(GT%2048 == 0){ // Time GC
-            //    //printf("hihi\n");
-            //     for(int i=0; i<2048; i++){
-            //         //이후에 GT+2048까지의 데이터가 없을 때 예외처리
-            //         hit_sum = stof(ml_hitv[GT+i])+ hit_sum;
-            //         cout << (GT+i) << endl;
-            //         cout << (ml_hitv.size()) << endl;
-            //         if(GT+i == ml_hitv.size()){
-            //             break;
-            //         } 
-            //     }
+            if(GT%2048 == 0){ // Time GC
+                //printf("hihi\n");
+                for(int i=0; i<100; i++){
+                    //이후에 GT+2048까지의 데이터가 없을 때 예외처리
+                    hit_sum = stof(ml_hitv[GT+i]) - hit_sum;
+                    cout << (GT+i) << endl;
+                    cout << (ml_hitv.size()) << endl;
+                    cout << "-------------------" << endl;
+                    if(GT+i == ml_hitv.size()-1){
+                        break;
+                    } 
+                }
                 
-            //     if(hit_sum <0){
-            //         std::vector<int> vec = cache[levelItr]->GC(GT);
-            //         // printf("%d\n",vec.size());
-            //         for(int block : vec){
-            //             cache[levelItr]->TimeErase(block);
-            //         }
-            //         vec.clear();
-            //     }
+                if(hit_sum <0){
+                    std::vector<int> vec = cache[levelItr]->GC(GT);
+                    // printf("%d\n",vec.size());
+                    for(int block : vec){
+                        cache[levelItr]->TimeErase(block);
+                    }
+                    vec.clear();
+                }
                 
-            // }
+            }
 /////////////////////////////////끄면 lfu//////////////////////////////////////
 
             ll block = cache[levelItr]->getBlockPosition(address);

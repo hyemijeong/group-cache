@@ -2,6 +2,8 @@
 
 #define ll long long
 
+using namespace std;
+
 ll readCounter=0, writeCounter=0;
 
 // helper functions
@@ -142,6 +144,7 @@ void Cache::insert(ll address, ll blockToReplace){
 }
 
 void Cache::TimeErase(int block){
+    printf("exexexexexexeexexeex");
     cacheBlocks[block] = -1;
     AddressInBlocks[block] = -1;
 }
