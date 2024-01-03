@@ -25,11 +25,9 @@ ll getNextAddress(){
         return 0;
     if(accessType == 'R'){
         incReads();
-        printf("0,");
     }
     else{
         incWrites();
-        printf("1,");
     }
     return atoll(address); //10진수 그대로 사용
 }
